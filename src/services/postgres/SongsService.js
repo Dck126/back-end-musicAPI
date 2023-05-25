@@ -62,7 +62,7 @@ class SongsService {
   }
 
   //Fungsi mengedit song By Id
-  async putSongById(id, { title, year, performer, genre, duration, albumId }) {
+  async putSongById(id, { title, year, performer, genre, duration }) {
     const query = {
       text: "UPDATE songs SET title = $1, year = $2, performer = $3, genre = $4, duration = $5 WHERE id = $6 RETURNING id",
       values: [title, year, performer, genre, duration, id],

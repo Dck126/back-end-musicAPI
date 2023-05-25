@@ -1,5 +1,10 @@
+const Joi = require("joi");
 const InvariantError = require("../../exceptions/InvariantError");
-const { AlbumPayloadSchema } = require("./schema");
+
+const AlbumPayloadSchema = Joi.object({
+  name: Joi.string().required(),
+  year: Joi.number().required(),
+});
 
 const AlbumValidator = {
   validateAlbumPayload: (payload) => {
