@@ -17,7 +17,12 @@ const mapSongs = ({
   duration,
   albumId: album_id,
 });
-
+const filterTitleSong = (song, title) =>
+  song.title.toLowerCase().includes(title);
+const filterPerformerSong = (song, performer) =>
+  song.performer.toLowerCase().includes(performer);
 module.exports = {
   mapSongs,
+  filterTitleSong,
+  filterPerformerSong,
 };

@@ -2,22 +2,11 @@ const { nanoid } = require("nanoid");
 const { Pool } = require("pg");
 const NotFoundError = require("../exceptions/NotFoundError");
 const InvariantError = require("../exceptions/InvariantError");
-const { mapSongs } = require("../utils");
+const { mapSongs, filterPerformerSong, filterTitleSong } = require("../utils");
 
 class SongService {
   constructor() {
     this._pool = new Pool();
-  }
-
-  async verifySongInDatabase(songId) {
-    const query = {
-      text: "SELECT id FROM songs WHERE id = $1",
-      values: [songId],
-    };
-
-    const result = await this._pool.query(query);
-
-    return result.rows.length;
   }
 
   async addSong({ title, year, performer, genre, duration, albumId }) {
@@ -49,46 +38,20 @@ class SongService {
 
   async getSongs(params) {
     try {
-      const { title, performer } = params;
-
-      if (title != undefined && performer != undefined) {
-        const query = {
-          text: "SELECT id, title, performer FROM songs WHERE title ILIKE $1 AND performer ILIKE $2",
-        };
-        const values = [`%${title}%`, `%${performer}%`];
-
-        const result = await this._pool.query(query, values);
-        return result.rows;
-      }
-
-      if (title) {
-        const query = {
-          text: "SELECT id, title, performer FROM songs WHERE title ILIKE $1",
-        };
-        const values = [`%${title}%`];
-
-        const result = await this._pool.query(query, values);
-        return result.rows;
-      }
-
-      if (performer) {
-        const query = {
-          text: "SELECT id, title, performer FROM songs WHERE performer ILIKE $1",
-        };
-        const values = [`%${performer}%`];
-
-        const result = await this._pool.query(query, values);
-        return result.rows;
-      }
-
       const query = {
         text: "SELECT id, title, performer FROM songs",
       };
-
-      const result = await this._pool.query(query);
-      return result.rows;
+      const resultSongs = await this._pool.query(query);
+      let songs = resultSongs.rows;
+      if ("title" in params) {
+        songs = songs.filter((s) => filterTitleSong(s, params.title));
+      }
+      if ("performer" in params) {
+        songs = songs.filter((s) => filterPerformerSong(s, params.performer));
+      }
+      return songs;
     } catch {
-      console.log("Erro Service getSongs");
+      console.log("Error Service getSongs");
     }
   }
 
@@ -132,9 +95,9 @@ class SongService {
   async deleteSongById(id) {
     const query = {
       text: "DELETE FROM songs WHERE id = $1 RETURNING id",
-      values: [id],
     };
-    const result = await this._pool.query(query);
+    const values = [id];
+    const result = await this._pool.query(query, values);
     const resultId = result.rows.length;
     if (!resultId) {
       throw new NotFoundError("Lagu gagal dihapus. Id tidak ditemukan");
