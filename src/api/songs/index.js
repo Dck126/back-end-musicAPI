@@ -1,11 +1,12 @@
-const SongsHandler = require("./handler");
-const routes = require("./routes");
+const SongHandler = require("./handler");
+const routes = require("./route");
 const SongsValidator = require("./validator");
+
 module.exports = {
   name: "songs",
   version: "1.0.0",
   register: async (server, { service }) => {
-    const songsHandler = new SongsHandler(service, SongsValidator);
-    server.route(routes(songsHandler));
+    const songHandler = new SongHandler(service, SongsValidator);
+    server.route(routes(songHandler));
   },
 };

@@ -1,27 +1,33 @@
 const Joi = require("joi");
-const InvariantError = require("../../exceptions/ClientError");
-// Create schema to validate payload
-const PlaylistPayload = Joi.object({
+const InvariantError = require("../../exceptions/InvariantError");
+
+const playlistPayloadSchema = Joi.object({
   name: Joi.string().required(),
 });
-const PlaylistSongsPayload = Joi.object({
+
+const playlistSongPayloadSchema = Joi.object({
   songId: Joi.string().required(),
 });
-// create method will be used to validate payload from UsersPayloadSchema
+
 const PlaylistsValidator = {
-  validatePlaylistsPayload: (payload) => {
-    const validationResult = PlaylistPayload.validate(payload);
+  validatePlaylistPayload: (payload) => {
+    const validationResult = playlistPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
-  validatePlaylistSongsPayload: (payload) => {
-    const validationResult = PlaylistSongsPayload.validate(payload);
+
+  validatePlaylistSongPayload: (payload) => {
+    const validationResult = playlistSongPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 };
 

@@ -1,16 +1,12 @@
 const PlaylistHandler = require("./handler");
-const routes = require("./routes");
+const routes = require("./route");
 const PlaylistsValidator = require("./validator");
 
 module.exports = {
   name: "playlists",
   version: "1.0.0",
-  register: async (server, { playlistsService }) => {
-    //di dalam fungsi asynchronous register kita buat instance dari authenticationsHandler dan gunakan instance tersebut pada routes konfigurasi
-    const playlistsHandler = new PlaylistHandler(
-      playlistsService,
-      PlaylistsValidator
-    );
-    server.route(routes(playlistsHandler));
+  register: async (server, { service }) => {
+    const playlistHandler = new PlaylistHandler(service, PlaylistsValidator);
+    server.route(routes(playlistHandler));
   },
 };

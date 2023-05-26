@@ -1,9 +1,10 @@
 const Joi = require("joi");
+const currentYear = new Date().getFullYear();
 const InvariantError = require("../../exceptions/InvariantError");
 
-const SongsPayloadSchema = Joi.object({
+const songPayloadSchema = Joi.object({
   title: Joi.string().required(),
-  year: Joi.number().max(new Date().getFullYear()).required(),
+  year: Joi.number().integer().min(1900).max(currentYear).required(),
   genre: Joi.string().required(),
   performer: Joi.string().required(),
   duration: Joi.number(),
@@ -11,12 +12,14 @@ const SongsPayloadSchema = Joi.object({
 });
 
 const SongsValidator = {
-  validateSongsPayload: (payload) => {
-    const validationResult = SongsPayloadSchema.validate(payload);
+  validateSongPayload: (payload) => {
+    const validationResult = songPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 };
 

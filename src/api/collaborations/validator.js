@@ -1,19 +1,21 @@
 const Joi = require("joi");
 const InvariantError = require("../../exceptions/InvariantError");
 
-const CollaborationPayload = Joi.object({
+const CollaborationPayloadSchema = Joi.object({
   playlistId: Joi.string().required(),
   userId: Joi.string().required(),
 });
 
-const CollaborationsValidator = {
+const CollaborationValidator = {
   validateCollaborationPayload: (payload) => {
-    const validationResult = CollaborationPayload.validate(payload);
+    const validationResult = CollaborationPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 };
 
-module.exports = CollaborationsValidator;
+module.exports = CollaborationValidator;

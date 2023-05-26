@@ -1,44 +1,50 @@
 const Joi = require("joi");
 const InvariantError = require("../../exceptions/InvariantError");
 
-const PostAuthenticationsPayloadSchema = Joi.object({
+const PostAuthenticationPayloadSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
 });
 
-const PutAuthenticationsPayloadSchema = Joi.object({
+const PutAuthenticationPayloadSchema = Joi.object({
   refreshToken: Joi.string().required(),
 });
 
-const DeleteAuthenticationsPayloadSchema = Joi.object({
+const DeleteAuthenticationPayloadSchema = Joi.object({
   refreshToken: Joi.string().required(),
 });
 
-const AuthenticationValidator = {
-  validatePostAuthenticationsPayloadSchema: (payload) => {
-    const validationResult = PostAuthenticationsPayloadSchema.validate(payload);
+const AuthenticationsValidator = {
+  validatePostAuthenticationPayload: (payload) => {
+    const validationResult = PostAuthenticationPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 
-  validatePutAuthenticationsPayloadSchema: (payload) => {
-    const validationResult = PutAuthenticationsPayloadSchema.validate(payload);
+  validatePutAuthenticationPayload: (payload) => {
+    const validationResult = PutAuthenticationPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 
-  validateDeleteAuthenticationsPayloadSchema: (payload) => {
+  validateDeleteAuthenticationPayload: (payload) => {
     const validationResult =
-      DeleteAuthenticationsPayloadSchema.validate(payload);
+      DeleteAuthenticationPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 };
 
-module.exports = AuthenticationValidator;
+module.exports = AuthenticationsValidator;

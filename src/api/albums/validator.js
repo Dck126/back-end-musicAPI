@@ -1,18 +1,22 @@
 const Joi = require("joi");
-const InvariantError = require("../../exceptions/InvariantError");
+const currentYear = new Date().getFullYear();
 
-const AlbumPayloadSchema = Joi.object({
+const albumPayloadSchema = Joi.object({
   name: Joi.string().required(),
-  year: Joi.number().required(),
+  year: Joi.number().integer().min(1900).max(currentYear).required(),
 });
 
-const AlbumValidator = {
+const InvariantError = require("../../exceptions/InvariantError");
+
+const AlbumsValidator = {
   validateAlbumPayload: (payload) => {
-    const validationResult = AlbumPayloadSchema.validate(payload);
+    const validationResult = albumPayloadSchema.validate(payload);
+
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+    return validationResult.value;
   },
 };
 
-module.exports = AlbumValidator;
+module.exports = AlbumsValidator;

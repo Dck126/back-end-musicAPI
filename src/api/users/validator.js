@@ -1,20 +1,21 @@
 const Joi = require("joi");
-const InvariantError = require("../../exceptions/ClientError");
-// Create schema to validate payload
-const UsersPayloadSchema = Joi.object({
+const InvariantError = require("../../exceptions/InvariantError");
+
+const UserPayloadSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
   fullname: Joi.string().required(),
 });
 
-// create method will be used to validate payload from UsersPayloadSchema
 const UsersValidator = {
-  validateUsersPayload: (payload) => {
-    const validationResult = UsersPayloadSchema.validate(payload);
+  validateUserPayload: (payload) => {
+    const validationResult = UserPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 };
 

@@ -1,15 +1,13 @@
-const songsdb = ({
+/* eslint-disable key-spacing */
+/* eslint-disable camelcase */
+const mapSongs = ({
   id,
   title,
   year,
   performer,
   genre,
   duration,
-  username,
-  name,
-  owner,
-  playlist_id,
-  song_id,
+  album_id,
 }) => ({
   id,
   title,
@@ -17,25 +15,9 @@ const songsdb = ({
   performer,
   genre,
   duration,
-  username,
-  name,
-  owner,
-  playlistId: playlist_id,
-  songId: song_id,
+  albumId: album_id,
 });
 
-const filterTitleSong = (song, title) =>
-  song.title.toLowerCase().includes(title);
-const filterPerformerSong = (song, performer) =>
-  song.performer.toLowerCase().includes(performer);
-
-// const filterPlaylistName = (playlist, name) =>
-//   playlist.name.toLowerCase().includes(name);
-// const filterUserUsername = (user, username) =>
-//   user.username.toLowerCase().includes(username);
-
 module.exports = {
-  songsdb,
-  filterPerformerSong,
-  filterTitleSong,
+  mapSongs,
 };

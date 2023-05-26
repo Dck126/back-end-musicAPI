@@ -1,12 +1,12 @@
-const AlbumsHandler = require("./handler");
-const routes = require("./routes");
-const AlbumValidator = require("./validator");
+const AlbumHandler = require("./handler");
+const routes = require("./route");
+const AlbumsValidator = require("./validator");
 
 module.exports = {
   name: "albums",
   version: "1.0.0",
   register: async (server, { service }) => {
-    const albumsHandler = new AlbumsHandler(service, AlbumValidator);
-    server.route(routes(albumsHandler));
+    const albumHandler = new AlbumHandler(service, AlbumsValidator);
+    server.route(routes(albumHandler));
   },
 };
